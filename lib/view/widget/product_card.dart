@@ -14,6 +14,7 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return  Card(
+      color: Colors.white,
       child: Padding(padding: EdgeInsetsGeometry.all(2),child: Row(
         children: [
           ClipRRect(
