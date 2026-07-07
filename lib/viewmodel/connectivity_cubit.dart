@@ -11,16 +11,20 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   late  StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   ConnectivityCubit() : super(ConnectivityState(true));
 
-  Future<void>init()async{
-    final result=await _connectivity.checkConnectivity();
-    final isConnection=hasConnetcion(result);
-    emit(ConnectivityState(isConnection));
+  Future<void> init() async {
+    final result = await _connectivity.checkConnectivity();
+    emit(ConnectivityState(hasConnetcion(result)));
+
     _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((r){
-      emit(ConnectivityState(hasConnetcion(result)));
-    });
-  }
-  hasConnetcion(List<ConnectivityResult>res){
+        _connectivity.onConnectivityChanged.listen((r) {
+          emit(ConnectivityState(hasConnetcion(r)));
+        });
+  }  hasConnetcion(List<ConnectivityResult>res){
     return res.any((r)=>r!=ConnectivityResult.none);
+  }
+  @override
+  Future<void> close() {
+    _connectivitySubscription.cancel();
+    return super.close();
   }
 }
